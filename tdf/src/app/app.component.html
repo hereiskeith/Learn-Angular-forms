@@ -2,7 +2,12 @@
 
 <!--  ngModel, ngForm, ngModelGroup-->
   <h2>Application Form</h2>
-  <form #userForm="ngForm">
+
+  <div class="alert alert-danger" *ngIf="errorMessage">
+    {{errorMessage}}
+  </div>
+
+  <form #userForm="ngForm" novalidate (submit)="onSubmit()" *ngIf="!isSubmitted">
 <!--    {{ userForm.value | json }}-->
 <!--    <hr />-->
 <!--    {{userModel | json}}-->
@@ -29,7 +34,6 @@
         type="phone"
         #phone="ngModel"
         pattern="^\d{10}$"
-        required
         [class.is-invalid]="phone.invalid && phone.touched"
         class="form-control"
         name="phone"
@@ -41,13 +45,18 @@
       </div>
     </div>
 
-    {{phone.invalid}}
-
     <div class="form-group">
-      <select class="custom-select" name="topic" [(ngModel)]="userModel.topic">
-        <option value="">I am interested in</option>
+      <select (blur)="validateTopic(topic.value)"
+              (change)="validateTopic(topic.value)"
+              [class.is-invalid]="hasTopicError && topic.touched"
+              class="custom-select"
+              #topic="ngModel"
+              name="topic"
+              [(ngModel)]="userModel.topic">
+        <option value="default">I am interested in</option>
         <option *ngFor="let topic of topics">{{topic}}</option>
       </select>
+      <small class="text-danger" [class.d-none]="!hasTopicError || topic.untouched">Please choose a topic</small>
     </div>
 
     <div class="mb-3">
@@ -69,6 +78,6 @@
       </label>
     </div>
 
-    <button class="btn btn-primary" type="submit">Submit form</button>
+    <button [disabled]="userForm.form.invalid || hasTopicError" class="btn btn-primary" type="submit">Submit form</button>
 
   </form>
