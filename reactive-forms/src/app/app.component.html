@@ -1,0 +1,59 @@
+<div class="container-fluid">
+  <h2>Application Form</h2>
+
+  <form [formGroup]="registerForm">
+    <div class="form-group">
+      <label>Name</label>
+      <input type="text" [class.is-invalid]="usename.invalid && usename.touched" class="form-control" formControlName="name">
+      <div *ngIf="usename.invalid && usename.touched">
+        <small class="text-danger" *ngIf="usename.errors?.required">Your username is required</small>
+        <small class="text-danger" *ngIf="usename.errors?.minlength">Min length of your username is 3</small>
+        <small class="text-danger" *ngIf="usename.errors?.forbiddenName">{{usename.errors?.forbiddenName.value}} is not valid</small>
+      </div>
+
+    </div>
+
+    <div class="form-group">
+      <label>Email</label>
+      <input [class.is-invalid]="email.invalid && email.touched" type="email" class="form-control" formControlName="email">
+      <small class="text-danger" *ngIf="email.invalid && email.touched">Email is required</small>
+    </div>
+
+    <div class="form-check mb-3">
+      <input class="form-check-input" formControlName="subscribe" type="checkbox">
+      <label>Send me promotional offers</label>
+    </div>
+
+    <div class="form-group">
+      <label>Password</label>
+      <input type="password" class="form-control" formControlName="password">
+    </div>
+
+    <div class="form-group">
+      <label>Confirm Password</label>
+      <input [class.is-invalid]="registerForm.errors?.misMatch" type="password" class="form-control" formControlName="confirmPassword">
+      <small class="text-danger" *ngIf="registerForm.errors?.misMatch">The passwords are mismatched</small>
+    </div>
+
+    <div formGroupName="address">
+      <div class="form-group">
+        <label>City</label>
+        <input type="text" class="form-control" formControlName="city">
+      </div>
+
+      <div class="form-group">
+        <label>State</label>
+        <input type="text" class="form-control" formControlName="state">
+      </div>
+
+      <div class="form-group">
+        <label>Country</label>
+        <input type="text" class="form-control" formControlName="country">
+      </div>
+    </div>
+
+    <button class="btn btn-primary" type="submit">Register</button>
+    <button (click)="loadAPIData()" class="btn btn-secondary ml-2" type="button">Load API Data</button>
+  </form>
+
+</div>
